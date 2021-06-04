@@ -66,14 +66,24 @@ namespace API.Data
             .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
-        public async Task<bool> SaveAllAync()
+        public async Task<bool> SaveAllAsync()
         {
             return await __context.SaveChangesAsync() > 0;
         }
 
+        // public Task<bool> SaveAllAsync()
+        // {
+        //     throw new System.NotImplementedException();
+        // }
+
+        // public async Task<bool> SaveAllAsync()
+        // {
+        //     return await __context.SaveChangesAsync() > 0;
+        // }
+
         public void Update(AppUser user)
         {
-            __context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            __context.Entry(user).State = EntityState.Modified;
         }
     }
 }

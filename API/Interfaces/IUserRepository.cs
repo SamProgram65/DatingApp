@@ -9,7 +9,7 @@ namespace API.Interfaces
     {
         void Update(AppUser user);
 
-        Task<bool> SaveAllAync();
+        Task<bool> SaveAllAsync();
 
         Task<IEnumerable<AppUser>> GetUserAsync();
 
