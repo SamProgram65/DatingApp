@@ -15,7 +15,7 @@ import { environment } from 'src/environments/environment';
 })
 export class PhotoEditorComponent implements OnInit {
   @Input() member: Member;
-  uploader: FileUploader;
+  public uploader: FileUploader;
   hasBaseDropzoneOver = false;
   baseUrl = environment.apiUrl;
   user: User;
@@ -29,8 +29,9 @@ export class PhotoEditorComponent implements OnInit {
     this.initializeUploader();
   }
 
-  fileOverBase(e: any)
+  public fileOverBase(e: any):void //event e of type any
   {
+    console.log('file event fired');
     this.hasBaseDropzoneOver = e;
   }
 
@@ -55,12 +56,12 @@ export class PhotoEditorComponent implements OnInit {
 
   initializeUploader()
   {
-    this.uploader = new FileUploader
-    ({
-      url: this.baseUrl + "users/add-photo",
-      authToken: 'Bearer' + this.user.token,
+    this.uploader = new FileUploader ({
+      url: this.baseUrl + 'users/add-photo',
+      authToken: 'Bearer ' + this.user.token,//leave a space after the word bearer so the 
+                                             //token is separated from bearer else your uploader won't work
       isHTML5: true,
-      allowedFileType: ['image'],
+      allowedFileType:['image'],
       removeAfterUpload: true,
       autoUpload: false,
       maxFileSize: 10 * 1024 * 1024
@@ -73,8 +74,13 @@ export class PhotoEditorComponent implements OnInit {
     this.uploader.onSuccessItem = (item, response, status, headers) =>
      {
     if(response){
-      const photo =JSON.parse(response);
+      const photo: Photo =JSON.parse(response);
       this.member.photos.push(photo);
+      if(photo.isMain) {
+        this.user.photourl = photo.url;
+        this.member.photoUrl = photo.url;
+        this.accountService.setCurrentUser(this.user);
+      }
         }
     }
   }
